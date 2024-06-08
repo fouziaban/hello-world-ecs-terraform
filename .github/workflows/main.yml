@@ -50,9 +50,9 @@ jobs:
       working-directory: infra/accounts/dev/ecs
       run: terraform init -backend-config="bucket=${{ secrets.S3_BUCKET_NAME }}"
 
-    - name: Apply Terraform in ecs
-      working-directory: infra/accounts/dev/ecs
-      run: terraform apply -auto-approve -lock=false
+    # - name: Apply Terraform in ecs
+    #   working-directory: infra/accounts/dev/ecs
+    #   run: terraform apply -auto-approve 
       
     - name: Build Docker image
       working-directory: src
