@@ -13,17 +13,22 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Install AWS CLI
+      run: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install
+
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+      run: |
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile asmigar
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile asmigar
+        aws configure set region ${{ secrets.AWS_REGION }} --profile asmigar
 
     - name: Login to Amazon ECR
       id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
+      run: docker login --username AWS -p $(aws ecr get-login-password --region ${{ secrets.AWS_REGION }}) ${{ secrets.ECR_REPOSITORY_URL }}
+        
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
@@ -35,7 +40,7 @@ jobs:
 
     - name: Apply Terraform in remote_state
       working-directory: infra/accounts/dev/remote_state
-      run: terraform apply
+      run: terraform apply -auto-approve
 
     - name: Initialize Terraform in ecs
       working-directory: infra/accounts/dev/ecs
@@ -43,15 +48,14 @@ jobs:
 
     - name: Apply Terraform in ecs
       working-directory: infra/accounts/dev/ecs
-      run: terraform apply
+      run: terraform apply -auto-approve
 
     - name: Build Docker image
+      working-directory: src
       run: docker build -t ${{ secrets.ECR_REPOSITORY_URL }}:${{ secrets.TF_VAR_release_version }} .
 
-    - name: Login into ECR repo
-      run: docker login --username AWS -p $(aws ecr get-login-password --region ${{ secrets.AWS_REGION }}) ${{ secrets.ECR_REPOSITORY_URL }}
-
     - name: Push Docker image to Amazon ECR
+      working-directory: src
       run: docker push ${{ secrets.ECR_REPOSITORY_URL }}:${{ secrets.TF_VAR_release_version }}
 
     - name: Apply Terraform configuration
