@@ -2,7 +2,7 @@ terraform {
   backend "s3" {
     key            = "dev/ecs/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "hello-world-state-locks-db"
+    dynamodb_table = "hello-world-state-locks-db1"
     encrypt        = true
     profile        = "asmigar"
   }
