@@ -3,7 +3,7 @@ resource "random_id" "s3_suffix" {
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "hello-world-terraform-state-${random_id.s3_suffix.hex}"
+  bucket = "hello-world-terraform-state"
 
   # Prevent accidental deletion of this S3 bucket
   lifecycle {
@@ -35,7 +35,7 @@ resource "aws_s3_bucket_versioning" "terraform_state" {
 
 
 resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "hello-world-state-locks"
+  name         = "hello-world-state-locks-db"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
 
