@@ -3,7 +3,7 @@ resource "random_id" "s3_suffix" {
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "hello-world-terraform-state"
+  bucket = "hello-world-terraform-state-${random_id.s3_suffix.hex}"
 
   # Prevent accidental deletion of this S3 bucket
   lifecycle {
@@ -23,7 +23,6 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" 
   }
 }
 
-# Enable versioning so we can see the full revision history of our state files
 resource "aws_s3_bucket_versioning" "terraform_state" {
   bucket = aws_s3_bucket.terraform_state.id
 
@@ -32,10 +31,8 @@ resource "aws_s3_bucket_versioning" "terraform_state" {
   }
 }
 
-
-
 resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "hello-world-state-locks-db"
+  name         = "hello-world-state-locks-${random_id.s3_suffix.hex}"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
 
