@@ -52,7 +52,7 @@ jobs:
 
     - name: Apply Terraform in ecs
       working-directory: infra/accounts/dev/ecs
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -lock=false
       
     - name: Build Docker image
       working-directory: src
