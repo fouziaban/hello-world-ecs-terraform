@@ -38,12 +38,12 @@ jobs:
 
     - name: Initialize Terraform in ecs
       working-directory: infra/accounts/dev/ecs
-      run: terraform init
+      run: terraform init -var="s3_bucket_name=${{ secrets.S3_BUCKET_NAME }}"
 
     - name: Apply Terraform in ecs
       working-directory: infra/accounts/dev/ecs
-      run: terraform apply -auto-approve -var="s3_bucket_name=${{ secrets.S3_BUCKET_NAME }}"
-
+      run: terraform apply -auto-approve 
+      
     - name: Build Docker image
       working-directory: src
       run: docker build -t ${{ secrets.ECR_REPOSITORY_URL }}:${{ secrets.TF_VAR_release_version }} .
