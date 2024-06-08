@@ -52,7 +52,7 @@ jobs:
 
     - name: Apply Terraform in ecs
       working-directory: infra/accounts/dev/ecs
-      run: terraform apply 
+      run: terraform apply -auto-approve
       
     - name: Build Docker image
       working-directory: src
@@ -64,4 +64,4 @@ jobs:
 
     - name: Apply Terraform configuration
       working-directory: infra/accounts/dev/ecs
-      run: terraform apply -var="release_version=${{ secrets.TF_VAR_release_version }}"
+      run: terraform apply -auto-approve -var="release_version=${{ secrets.TF_VAR_release_version }}"
