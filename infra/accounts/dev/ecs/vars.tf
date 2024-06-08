@@ -18,3 +18,8 @@ variable "release_version" {
   description = "Image version which needs to be deployed"
   default = ""
 }
+
+variable "s3_bucket_name" {
+  description = "The name of the S3 bucket to be used"
+  type        = string
+}
