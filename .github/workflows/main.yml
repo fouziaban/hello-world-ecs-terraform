@@ -52,7 +52,7 @@ jobs:
 
     - name: Apply Terraform in ecs
       working-directory: infra/accounts/dev/ecs
-      run: terraform apply -backend-config="bucket=${{ secrets.S3_BUCKET_NAME }}"
+      run: terraform apply 
       
     - name: Build Docker image
       working-directory: src
