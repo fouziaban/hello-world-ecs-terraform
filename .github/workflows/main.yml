@@ -28,13 +28,20 @@ jobs:
       with:
         terraform_version: 1.5.7
 
-    - name: Initialize Terraform in remote_state
-      working-directory: infra/accounts/dev/remote_state
-      run: terraform init
+    # - name: Initialize Terraform in remote_state
+    #   working-directory: infra/accounts/dev/remote_state
+    #   run: terraform init
 
-    - name: Apply Terraform in remote_state
-      working-directory: infra/accounts/dev/remote_state
-      run: terraform apply -auto-approve
+    # - name: Apply Terraform in remote_state
+    #   working-directory: infra/accounts/dev/remote_state
+    #   run: terraform apply -auto-approve
+
+    # - name: Get Terraform output
+    #   id: terraform_output
+    #   run: |
+    #     cd infra/accounts/dev/remote_state
+    #     terraform output -json > terraform_output.json
+    #     echo "::set-output name=s3_bucket::$(cat terraform_output.json | jq -r '.terraform_state_bucket_name.value')"
 
     - name: Initialize Terraform in ecs
       working-directory: infra/accounts/dev/ecs
@@ -42,7 +49,7 @@ jobs:
 
     - name: Apply Terraform in ecs
       working-directory: infra/accounts/dev/ecs
-      run: terraform apply -auto-approve 
+      run: terraform apply -auto-approve -var="s3_bucket_name=${{ secrets.S3_BUCKET_NAME }}"
       
     - name: Build Docker image
       working-directory: src
