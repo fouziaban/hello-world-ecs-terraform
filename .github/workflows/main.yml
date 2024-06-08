@@ -28,8 +28,8 @@ jobs:
       with:
         terraform_version: 1.5.7
         
-    - name: Debug S# bucket name
-      run: echo "hello-world-terraform-state-97eb1079"
+    # - name: Debug S3 bucket name
+    #   run: echo "hello-world-terraform-state-97eb1079"
 
     # - name: Initialize Terraform in remote_state
     #   working-directory: infra/accounts/dev/remote_state
@@ -46,22 +46,22 @@ jobs:
     #     terraform output -json > terraform_output.json
     #     echo "::set-output name=s3_bucket::$(cat terraform_output.json | jq -r '.terraform_state_bucket_name.value')"
 
-    # - name: Initialize Terraform in ecs
-    #   working-directory: infra/accounts/dev/ecs
-    #   run: terraform init
+    - name: Initialize Terraform in ecs
+      working-directory: infra/accounts/dev/ecs
+      run: terraform init -var="s3_bucket_name=hello-world-terraform-state-97eb1079"
 
-    # - name: Apply Terraform in ecs
-    #   working-directory: infra/accounts/dev/ecs
-    #   run: terraform apply -auto-approve -var="s3_bucket_name=${{ secrets.S3_BUCKET_NAME }}"
+    - name: Apply Terraform in ecs
+      working-directory: infra/accounts/dev/ecs
+      run: terraform apply -auto-approve 
       
-    # - name: Build Docker image
-    #   working-directory: src
-    #   run: docker build -t ${{ secrets.ECR_REPOSITORY_URL }}:${{ secrets.TF_VAR_release_version }} .
+    - name: Build Docker image
+      working-directory: src
+      run: docker build -t ${{ secrets.ECR_REPOSITORY_URL }}:${{ secrets.TF_VAR_release_version }} .
 
-    # - name: Push Docker image to Amazon ECR
-    #   working-directory: src
-    #   run: docker push ${{ secrets.ECR_REPOSITORY_URL }}:${{ secrets.TF_VAR_release_version }}
+    - name: Push Docker image to Amazon ECR
+      working-directory: src
+      run: docker push ${{ secrets.ECR_REPOSITORY_URL }}:${{ secrets.TF_VAR_release_version }}
 
-    # - name: Apply Terraform configuration
-    #   working-directory: infra/accounts/dev/ecs
-    #   run: terraform apply -auto-approve -var="release_version=${{ secrets.TF_VAR_release_version }}"
+    - name: Apply Terraform configuration
+      working-directory: infra/accounts/dev/ecs
+      run: terraform apply -auto-approve -var="release_version=${{ secrets.TF_VAR_release_version }}"
