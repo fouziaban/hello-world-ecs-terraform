@@ -43,13 +43,13 @@ jobs:
     #     terraform output -json > terraform_output.json
     #     echo "::set-output name=s3_bucket::$(cat terraform_output.json | jq -r '.terraform_state_bucket_name.value')"
 
-    - name: Initialize Terraform in ecs
-      working-directory: infra/accounts/dev/ecs
-      run: terraform init
+    # - name: Initialize Terraform in ecs
+    #   working-directory: infra/accounts/dev/ecs
+    #   run: terraform init
 
-    - name: Apply Terraform in ecs
-      working-directory: infra/accounts/dev/ecs
-      run: terraform apply -auto-approve -var="s3_bucket_name=${{ secrets.S3_BUCKET_NAME }}"
+    # - name: Apply Terraform in ecs
+    #   working-directory: infra/accounts/dev/ecs
+    #   run: terraform apply -auto-approve -var="s3_bucket_name=${{ secrets.S3_BUCKET_NAME }}"
       
     - name: Build Docker image
       working-directory: src
