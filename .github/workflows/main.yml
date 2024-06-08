@@ -21,7 +21,7 @@ jobs:
 
     - name: Login to Amazon ECR
       id: login-ecr
-      run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_URL }}
+      run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} --profile asmigar | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_URL }}
         
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
