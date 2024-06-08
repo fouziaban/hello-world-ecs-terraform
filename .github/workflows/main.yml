@@ -27,6 +27,9 @@ jobs:
       uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: 1.5.7
+        
+    - name: Debug S# bucket name
+      run: echo "${{ secrets.S#_BUCKET_NAME }}"
 
     # - name: Initialize Terraform in remote_state
     #   working-directory: infra/accounts/dev/remote_state
@@ -50,18 +53,15 @@ jobs:
     # - name: Apply Terraform in ecs
     #   working-directory: infra/accounts/dev/ecs
     #   run: terraform apply -auto-approve -var="s3_bucket_name=${{ secrets.S3_BUCKET_NAME }}"
-
-    - name: Debug S3 Bucket Name
-      run: echo "S3 Bucket Name: ${{ secrets.S3_BUCKET_NAME }}"
       
-    - name: Build Docker image
-      working-directory: src
-      run: docker build -t ${{ secrets.ECR_REPOSITORY_URL }}:${{ secrets.TF_VAR_release_version }} .
+    # - name: Build Docker image
+    #   working-directory: src
+    #   run: docker build -t ${{ secrets.ECR_REPOSITORY_URL }}:${{ secrets.TF_VAR_release_version }} .
 
-    - name: Push Docker image to Amazon ECR
-      working-directory: src
-      run: docker push ${{ secrets.ECR_REPOSITORY_URL }}:${{ secrets.TF_VAR_release_version }}
+    # - name: Push Docker image to Amazon ECR
+    #   working-directory: src
+    #   run: docker push ${{ secrets.ECR_REPOSITORY_URL }}:${{ secrets.TF_VAR_release_version }}
 
-    - name: Apply Terraform configuration
-      working-directory: infra/accounts/dev/ecs
-      run: terraform apply -auto-approve -var="release_version=${{ secrets.TF_VAR_release_version }}"
+    # - name: Apply Terraform configuration
+    #   working-directory: infra/accounts/dev/ecs
+    #   run: terraform apply -auto-approve -var="release_version=${{ secrets.TF_VAR_release_version }}"
