@@ -48,7 +48,7 @@ jobs:
 
     - name: Initialize Terraform in ecs
       working-directory: infra/accounts/dev/ecs
-      run: terraform init -var="s3_bucket_name=hello-world-terraform-state-97eb1079"
+      run: terraform init -backend-config="bucket=${{ secrets.S3_BUCKET_NAME }}"
 
     - name: Apply Terraform in ecs
       working-directory: infra/accounts/dev/ecs
