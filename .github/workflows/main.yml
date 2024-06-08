@@ -28,13 +28,13 @@ jobs:
       with:
         terraform_version: 1.5.7
 
-    - name: Initialize Terraform in remote_state
-      working-directory: infra/accounts/dev/remote_state
-      run: terraform init
+    # - name: Initialize Terraform in remote_state
+    #   working-directory: infra/accounts/dev/remote_state
+    #   run: terraform init
 
-    - name: Apply Terraform in remote_state
-      working-directory: infra/accounts/dev/remote_state
-      run: terraform apply -auto-approve
+    # - name: Apply Terraform in remote_state
+    #   working-directory: infra/accounts/dev/remote_state
+    #   run: terraform apply -auto-approve
 
     - name: Initialize Terraform in ecs
       working-directory: infra/accounts/dev/ecs
